@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Web Story Creator</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        
+        h1 { font-size: 20px; margin-bottom: 15px; text-align: center; color: #38bdf8; }
+        
+        /* Main Layout: Stacked on mobile, side-by-side on desktop */
+        .container { display: flex; flex-direction: column; width: 100%; max-width: 800px; gap: 20px; }
+        @media (min-width: 768px) {
+            .container { flex-direction: row; align-items: flex-start; justify-content: center; }
+        }
+
+        /* Mobile Screen Frame Preview */
+        .preview-wrapper { flex: 1; display: flex; justify-content: center; }
+        .mobile-frame { width: 100%; max-width: 340px; height: 560px; background-color: #000; border-radius: 24px; border: 6px solid #334155; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px 20px; background-size: cover; background-position: center; transition: background 0.3s; }
+        .story-text { font-size: 22px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.9); line-height: 1.3; z-index: 2; margin-bottom: 8px; color: #fff; }
+        .story-desc { font-size: 13px; text-shadow: 0 1px 3px rgba(0,0,0,0.9); z-index: 2; opacity: 0.95; color: #e2e8f0; }
+        .gradient-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.4), transparent); z-index: 1; }
+        
+        /* Top Pagination Indicators inside story */
+        .indicators { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; gap: 5px; z-index: 3; }
+        .dot { flex: 1; height: 3px; background-color: rgba(255,255,255,0.4); border-radius: 2px; }
+        .dot.active { background-color: #fff; }
+
+        /* Controls Panel */
+        .controls { flex: 1; background-color: #1e293b; padding: 20px; border-radius: 16px; border: 1px solid #334155; display: flex; flex-direction: column; gap: 15px; }
+        .control-group { display: flex; flex-direction: column; gap: 6px; }
+        .control-group label { font-size: 13px; font-weight: 600; color: #94a3b8; }
+        .control-group input, .control-group textarea { width: 100%; padding: 10px; background-color: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #fff; font-size: 14px; }
+        .control-group input:focus, .control-group textarea:focus { border-color: #38bdf8; outline: none; }
+        
+        .slide-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; background: #0f172a; padding: 8px 12px; border-radius: 8px; }
+        .slide-num { font-size: 14px; font-weight: bold; color: #38bdf8; }
+
+        .btn-group { display: flex; gap: 10px; }
+        .btn { flex: 1; background-color: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 14px; transition: background 0.2s; }
+        .btn:hover { background-color: #1d4ed8; }
+        .btn-secondary { background-color: #475569; }
+        .btn-secondary:hover { background-color: #334155; }
+        .btn-success { background-color: #16a34a; }
+        .btn-success:hover { background-color: #15803d; }
+    </style>
+</head>
+<body>
+
+    <h1>✨ Web Story Canvas Tool</h1>
+
+    <div class="container">
+        <!-- Live Mobile Canvas Preview -->
+        <div class="preview-wrapper">
+            <div class="mobile-frame" id="storyPreview">
+                <div class="indicators" id="indicatorsBox"></div>
+                <div class="gradient-overlay"></div>
+                <div class="story-text" id="previewTitle">Slide Title Here</div>
+                <div class="story-desc" id="previewDesc">Short description goes here...</div>
+            </div>
+        </div>
+
+        <!-- Editor Panel -->
+        <div class="controls">
+            <div class="slide-nav">
+                <button class="btn btn-secondary" style="padding: 5px 12px;" onclick="prevSlide()">◀ Back</button>
+                <div class="slide-num" id="slideLabel">Slide 1 of 1</div>
+                <button class="btn btn-secondary" style="padding: 5px 12px;" onclick="nextSlide()">Next ▶</button>
+            </div>
+
+            <div class="control-group">
+                <label>Background Image URL</label>
+                <input type="text" id="bgInput" placeholder="Paste link (Unsplash/Pixels)..." oninput="saveCurrentSlideData()">
+            </div>
+
+            <div class="control-group">
+                <label>Slide Title</label>
+                <textarea id="titleInput" rows="2" placeholder="Catchy heading..." oninput="saveCurrentSlideData()"></textarea>
+            </div>
+
+            <div class="control-group">
+                <label>Description</label>
+                <textarea id="descInput" rows="2" placeholder="Brief text detail..." oninput="saveCurrentSlideData()"></textarea>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn" onclick="addNewSlide()">➕ Add New Slide</button>
+                <button class="btn btn-success" onclick="exportData()">💾 Save Story</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array to hold multiple slides
+        let slides = [
+            {
+                bg: "https://unsplash.com",
+                title: "Welcome to Mobile Web Stories!",
+                desc: "Swipe or click next to see how beautifully this editor tracks multiple pages seamlessly."
+            }
+        ];
+        let currentIndex = 0;
+
+        function initStory() {
+            renderIndicators();
+            loadSlideData(currentIndex);
+        }
+
+        function renderIndicators() {
+            const box = document.getElementById('indicatorsBox');
+            box.innerHTML = '';
+            slides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = `dot ${index === currentIndex ? 'active' : ''}`;
+                box.appendChild(dot);
+            });
+        }
+
+        function loadSlideData(index) {
+            const slide = slides[index];
+            document.getElementById('bgInput').value = slide.bg;
+            document.getElementById('titleInput').value = slide.title;
+            document.getElementById('descInput').value = slide.desc;
+            
+            // Update Preview
+            document.getElementById('storyPreview').style.backgroundImage = `url('${slide.bg || 'https://unsplash.com'}')`;
+            document.getElementById('previewTitle').innerText = slide.title || "Untitled Slide";
+            document.getElementById('previewDesc').innerText = slide.desc || "";
+            
+            document.getElementById('slideLabel').innerText = `Slide ${index + 1} of ${slides.length}`;
+            renderIndicators();
+        }
+
+        function saveCurrentSlideData() {
+            slides[currentIndex].bg = document.getElementById('bgInput').value;
+            slides[currentIndex].title = document.getElementById('titleInput').value;
+            slides[currentIndex].desc = document.getElementById('descInput').value;
+            
+            // Dynamic update without reloading
+            document.getElementById('storyPreview').style.backgroundImage = `url('${slides[currentIndex].bg}')`;
+            document.getElementById('previewTitle').innerText = slides[currentIndex].title;
+            document.getElementById('previewDesc').innerText = slides[currentIndex].desc;
+        }
+
+        function addNewSlide() {
+            slides.push({
+                bg: "https://unsplash.com",
+                title: "New Fresh Slide Title",
+                desc: "Add your high-converting text content right here inside the new slide editor."
+            });
+            currentIndex = slides.length - 1;
+            loadSlideData(currentIndex);
+        }
+
+        function nextSlide() {
+            if (currentIndex < slides.length - 1) {
+                currentIndex++;
+                loadSlideData(currentIndex);
+            }
+        }
+
+        function prevSlide() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                loadSlideData(currentIndex);
+            }
+        }
+
+        function exportData() {
+            alert("🚀 Story Saved Successfully! Web Engine Integration Coming Up Next.");
+        }
+
+        // Initialize on load
+        window.onload = initStory;
+    </script>
+</body>
+</html>
