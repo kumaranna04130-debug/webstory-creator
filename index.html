@@ -292,6 +292,20 @@ function setFontSize(size) {
       if (animClass !== 'none') el.classList.add(animClass);
     }
   });
+           function generateAIImage() {
+  const prompt = document.getElementById('aiPromptInput').value;
+  if (!prompt) {
+    alert("Please enter a prompt!");
+    return;
+  }
+  
+  const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1080&height=1920&nologo=true`;
+  const bgInput = document.getElementById('bgUrlInput');
+  if (bgInput) {
+    bgInput.value = imageUrl;
+    bgInput.dispatchEvent(new Event('input'));
+  }
+}
 } window.onload = initStory;
     </script>
 </body>
