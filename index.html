@@ -74,7 +74,18 @@
                 <label>Background Image URL</label>
                 <input type="text" id="bgInput" placeholder="Paste link (Unsplash/Pixels)..." oninput="saveCurrentSlideData()">
             </div>
-
+<!-- Image Collection / Gallery Feature -->
+<div class="control-group">
+  <label>Image Collection / Gallery</label>
+  <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+    <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
+    <button onclick="document.getElementById('imageUpload').click()" type="button" style="padding: 8px 12px; background: #334155; color: #fff; border: 1px solid #475569; border-radius: 8px; cursor: pointer;">📂 Upload Image</button>
+  </div>
+  
+  <div id="mediaGallery" style="display: flex; gap: 8px; flex-wrap: wrap; max-height: 100px; overflow-y: auto; padding: 6px; background: #0f172a; border: 1px solid #475569; border-radius: 8px;">
+    <!-- Uploaded images yahan thumbnails ki tarah dikhenge -->
+  </div>
+</div>
             <div class="control-group">
                 <label>Slide Title</label>
                 <textarea id="titleInput" rows="2" placeholder="Catchy heading..." oninput="saveCurrentSlideData()"></textarea>
