@@ -196,7 +196,43 @@
         function exportData() {
             alert("🚀 Story Saved Successfully! Web Engine Integration Coming Up Next.");
         }
-// Text Formatting Functions
+let imageCollection = [];
+
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const imageUrl = e.target.result;
+      imageCollection.push(imageUrl);
+      renderGallery();
+      applyImageToBackground(imageUrl);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function renderGallery() {
+  const galleryDiv = document.getElementById('mediaGallery');
+  if (!galleryDiv) return;
+  galleryDiv.innerHTML = '';
+
+  imageCollection.forEach((url) => {
+    const img = document.createElement('img');
+    img.src = url;
+    img.style.cssText = 'width: 45px; height: 45px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 1px solid #475569;';
+    img.onclick = () => applyImageToBackground(url);
+    galleryDiv.appendChild(img);
+  });
+}
+
+function applyImageToBackground(url) {
+  const bgInput = document.getElementById('bgInput');
+  if (bgInput) {
+    bgInput.value = url;
+    bgInput.dispatchEvent(new Event('input'));
+  }
+}// Text Formatting Functions
 function setTextAlign(align) {
   document.getElementById('previewTitle').style.textAlign = align;
   document.getElementById('previewDesc').style.textAlign = align;
