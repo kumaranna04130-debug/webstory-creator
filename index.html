@@ -28,7 +28,26 @@
         .dot { flex: 1; height: 3px; background-color: rgba(255,255,255,0.4); border-radius: 2px; }
         .dot.active { background-color: #fff; }
 
-        /* Controls Panel */
+       /* Movement Keyframe Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideLeft {
+  from { transform: translateX(-50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Animation Classes */
+.anim-fade { animation: fadeIn 0.8s ease-out forwards; }
+.anim-zoom { animation: zoomIn 0.8s ease-out forwards; }
+.anim-slide { animation: slideLeft 0.8s ease-out forwards; } /* Controls Panel */
         .controls { flex: 1; background-color: #1e293b; padding: 20px; border-radius: 16px; border: 1px solid #334155; display: flex; flex-direction: column; gap: 15px; }
         .control-group { display: flex; flex-direction: column; gap: 6px; }
         .control-group label { font-size: 13px; font-weight: 600; color: #94a3b8; }
