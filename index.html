@@ -83,7 +83,21 @@
             <div class="control-group">
                 <label>Description</label>
                 <textarea id="descInput" rows="2" placeholder="Brief text detail..." oninput="saveCurrentSlideData()"></textarea>
-            </div>
+           <!-- Text Customization Controls -->
+<div class="control-group">
+  <label>Text Customization</label>
+  <div style="display: flex; gap: 8px;">
+    <button type="button" class="btn btn-secondary" onclick="setTextAlign('left')">Left</button>
+    <button type="button" class="btn btn-secondary" onclick="setTextAlign('center')">Center</button>
+    <button type="button" class="btn btn-secondary" onclick="setTextAlign('right')">Right</button>
+  </div>
+  <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+    <label for="textColor">Color:</label>
+    <input type="color" id="textColor" value="#ffffff" onchange="setTextColor(this.value)" style="padding: 2px; height: 35px; width: 50px;">
+    <label for="fontSize">Size:</label>
+    <input type="range" id="fontSize" min="16" max="48" value="22" oninput="setFontSize(this.value)">
+  </div>
+</div> </div>
 
             <div class="btn-group">
                 <button class="btn" onclick="addNewSlide()">➕ Add New Slide</button>
@@ -171,7 +185,20 @@
         function exportData() {
             alert("🚀 Story Saved Successfully! Web Engine Integration Coming Up Next.");
         }
+// Text Formatting Functions
+function setTextAlign(align) {
+  document.getElementById('previewTitle').style.textAlign = align;
+  document.getElementById('previewDesc').style.textAlign = align;
+}
 
+function setTextColor(color) {
+  document.getElementById('previewTitle').style.color = color;
+  document.getElementById('previewDesc').style.color = color;
+}
+
+function setFontSize(size) {
+  document.getElementById('previewTitle').style.fontSize = size + 'px';
+}
         // Initialize on load
         window.onload = initStory;
     </script>
