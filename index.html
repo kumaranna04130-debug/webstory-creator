@@ -113,7 +113,14 @@
             <div class="control-group">
                 <label>Description</label>
                 <textarea id="descInput" rows="2" placeholder="Brief text detail..." oninput="saveCurrentSlideData()"></textarea>
-          <div class="control-group">
+         <!-- ✨ AI Image Generator Section -->
+<div class="control-group" style="margin-top: 15px; background: #1e293b; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
+  <label style="color: #38bdf8; font-weight: bold;">✨ AI Image Generator (Free)</label>
+  <div style="display: flex; gap: 8px; margin-top: 8px;">
+    <input type="text" id="aiPromptInput" placeholder="e.g. Futuristic cloud computing 3d" style="flex: 1; padding: 8px; background: #0f172a; color: #fff; border: 1px solid #475569; border-radius: 6px;">
+    <button onclick="generateAIImage()" style="padding: 8px 12px; background: #0284c7; color: white; border: none; border-radius: 6px; cursor: pointer;">Generate</button>
+  </div>
+</div> <div class="control-group">
   <label>Text Movement Effect</label>
   <select id="animationSelect" onchange="applyAnimation(this.value)" style="width: 100%; padding: 8px; background: #0f172a; color: #fff; border: 1px solid #475569; border-radius: 8px;">
     <option value="none">None</option>
