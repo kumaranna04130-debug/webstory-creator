@@ -274,7 +274,18 @@ function setFontSize(size) {
   document.getElementById('previewTitle').style.fontSize = size + 'px';
 }
         // Initialize on load
-        window.onload = initStory;
+       function applyAnimation(animClass) {
+  const title = document.getElementById('previewTitle');
+  const desc = document.getElementById('previewDesc');
+
+  [title, desc].forEach(el => {
+    if (el) {
+      el.classList.remove('anim-fade', 'anim-zoom', 'anim-slide');
+      void el.offsetWidth; // Trigger reflow to restart animation
+      if (animClass !== 'none') el.classList.add(animClass);
+    }
+  });
+} window.onload = initStory;
     </script>
 </body>
 </html>
