@@ -113,7 +113,15 @@
             <div class="control-group">
                 <label>Description</label>
                 <textarea id="descInput" rows="2" placeholder="Brief text detail..." oninput="saveCurrentSlideData()"></textarea>
-           <!-- Text Customization Controls -->
+          <div class="control-group">
+  <label>Text Movement Effect</label>
+  <select id="animationSelect" onchange="applyAnimation(this.value)" style="width: 100%; padding: 8px; background: #0f172a; color: #fff; border: 1px solid #475569; border-radius: 8px;">
+    <option value="none">None</option>
+    <option value="anim-fade">Fade Up</option>
+    <option value="anim-zoom">Zoom In</option>
+    <option value="anim-slide">Slide From Left</option>
+  </select>
+</div> <!-- Text Customization Controls -->
 <div class="control-group">
   <label>Text Customization</label>
   <div style="display: flex; gap: 8px;">
